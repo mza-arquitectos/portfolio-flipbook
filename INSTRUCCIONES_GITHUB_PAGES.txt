@@ -1,0 +1,52 @@
+PORTFOLIO FLIPBOOK ONLINE V8
+DANIEL PERALTA ARCHITECT
+
+CONTENIDO DEL PAQUETE
+- index.html
+- .nojekyll
+- carpeta pdf
+- archivo opcional preview.jpg
+
+ANTES DE SUBIRLO
+1. Copia el portfolio en español dentro de la carpeta pdf.
+2. Nómbralo exactamente: portfolio-es.pdf
+3. Copia el portfolio en inglés dentro de la carpeta pdf.
+4. Nómbralo exactamente: portfolio-en.pdf
+5. Reemplaza REEMPLAZAR_PREVIEW.txt por una imagen llamada preview.jpg
+   para mejorar la vista previa al compartir el enlace.
+
+PUBLICAR EN GITHUB PAGES
+1. Crea un repositorio nuevo, por ejemplo:
+   portfolio-flipbook
+2. Sube TODO el contenido de esta carpeta a la raíz del repositorio.
+3. En GitHub abre:
+   Settings > Pages
+4. En Build and deployment selecciona:
+   Deploy from a branch
+5. Selecciona:
+   Branch: main
+   Folder: / (root)
+6. Guarda los cambios.
+7. GitHub generará una dirección similar a:
+   https://TU-USUARIO.github.io/portfolio-flipbook/
+
+ENLACES DIRECTOS
+Abrir en español:
+https://TU-USUARIO.github.io/portfolio-flipbook/?lang=es
+
+Abrir en inglés:
+https://TU-USUARIO.github.io/portfolio-flipbook/?lang=en
+
+Abrir en una página específica:
+https://TU-USUARIO.github.io/portfolio-flipbook/?lang=en&page=8
+
+BOTÓN VIEW PROJECTS
+Abre:
+https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1
+
+ACTUALIZAR EL PORTFOLIO
+Solo reemplaza los archivos:
+pdf/portfolio-es.pdf
+pdf/portfolio-en.pdf
+
+La dirección pública seguirá siendo la misma.

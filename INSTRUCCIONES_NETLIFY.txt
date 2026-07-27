@@ -1,0 +1,9 @@
+PUBLICAR RÁPIDAMENTE EN NETLIFY
+
+1. Coloca los dos PDF dentro de la carpeta pdf.
+2. Entra en Netlify Drop.
+3. Arrastra la carpeta completa PORTFOLIO_FLIPBOOK_ONLINE_V8.
+4. Netlify generará una dirección pública.
+5. Puedes cambiar el nombre del sitio desde la configuración de Netlify.
+
+Para actualizarlo, vuelve a subir la carpeta con los PDF nuevos.
