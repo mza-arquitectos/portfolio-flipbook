@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daniel Peralta Architect — Interactive Portfolio</title>
+<meta name="description" content="Interactive architectural portfolio by Daniel Peralta Architect.">
+<meta property="og:title" content="Daniel Peralta Architect — Interactive Portfolio">
+<meta property="og:description" content="Explore selected architectural projects in an interactive bilingual flipbook.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+:root{--es:#157da8;--en:#c93636;--text:#e6e6e9;--muted:#999;--panel:rgba(20,20,25,.94)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at center,#28282f 0%,#09090c 100%);color:var(--text)}
+body{overflow:hidden}button,a,input{font:inherit}.app{height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;padding:12px 16px}
+.top,.bottom{width:min(1380px,100%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:10}.bottom{justify-content:center;flex-wrap:wrap}
+.brand h1{margin:0;font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#d0d0d5}.brand p{margin:3px 0 0;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tools,.langs,.nav,.zoom,.jump{display:flex;align-items:center;gap:7px}.langs{padding:4px;border:1px solid rgba(255,255,255,.13);border-radius:7px;background:rgba(0,0,0,.2)}
+button,.btn{min-height:39px;padding:8px 12px;border:1px solid rgba(255,255,255,.25);border-radius:5px;background:rgba(255,255,255,.04);color:#ddd;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:.2s}
+button:hover:not(:disabled),.btn:hover{background:#eee;color:#111}button:disabled{opacity:.28;cursor:default}.lang{min-width:90px;border-color:transparent;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55}.lang[data-lang=es]{border-color:var(--es)}.lang[data-lang=en]{border-color:var(--en)}.lang[data-lang=es].active{background:var(--es);color:#fff;opacity:1}.lang[data-lang=en].active{background:var(--en);color:#fff;opacity:1}
+.viewport{position:relative;min-height:0;display:flex;align-items:center;justify-content:center;overflow:auto;overscroll-behavior:contain}.shell{flex:0 0 auto;transform-origin:center;transition:.2s}
+#book{width:100px;height:100px;filter:drop-shadow(0 30px 48px rgba(0,0,0,.58));transition:width .18s ease,height .18s ease}
+.page{background:#fff;overflow:hidden}.page img{width:100%;height:100%;display:block;object-fit:contain;background:#fff;user-select:none;-webkit-user-drag:none}
+.counter{min-width:75px;text-align:center;color:#bbb;font-size:12px}.zoomValue{min-width:48px;text-align:center;color:var(--muted);font-size:11px}.jump{padding-left:7px;border-left:1px solid rgba(255,255,255,.15)}.jump label{font-size:10px;text-transform:uppercase;color:var(--muted)}.jump input{width:58px;height:39px;border:1px solid rgba(255,255,255,.25);border-radius:5px;background:rgba(255,255,255,.05);color:#fff;text-align:center}
+.overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(8,8,11,.7);backdrop-filter:blur(7px);opacity:0;pointer-events:none;transition:.2s}.overlay.show{opacity:1;pointer-events:auto}.card{width:min(420px,calc(100% - 30px));padding:22px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:var(--panel);text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.5)}.card h2{margin:0 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.07em}.card p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.track{height:5px;margin:15px 0 8px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}.bar{height:100%;width:0;background:#eee;transition:.15s}.fallback{display:none;margin:14px auto 0}.fallback.show{display:inline-flex}
+.backdrop{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:.2s}.backdrop.open{opacity:1;pointer-events:auto}.thumbs{position:fixed;left:50%;bottom:0;z-index:31;width:min(1260px,calc(100% - 20px));max-height:65dvh;transform:translate(-50%,105%);transition:.25s;border:1px solid rgba(255,255,255,.14);border-bottom:0;border-radius:12px 12px 0 0;background:var(--panel);overflow:hidden}.thumbs.open{transform:translate(-50%,0)}.thumbHead{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.13)}.thumbHead h2{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.1em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:11px;padding:13px;max-height:calc(65dvh - 58px);overflow:auto}.thumb{position:relative;padding:0;background:#fff;overflow:hidden}.thumb img{display:block;width:100%;aspect-ratio:2480/1860;object-fit:cover}.thumb span{position:absolute;right:5px;bottom:5px;padding:3px 6px;border-radius:3px;background:rgba(0,0,0,.75);color:#fff;font-size:10px}.thumb.active{outline:3px solid #fff;outline-offset:2px}.hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:1050px){.brand p{display:none}.label{display:none}}
+@media(max-width:760px){.app{padding:8px}.top{flex-wrap:wrap}.brand{width:100%;text-align:center}.tools{width:100%;justify-content:center;flex-wrap:wrap}.jump{border-left:0;padding-left:0}.jump label{display:none}.grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}}
+@media(max-width:430px){.langs{width:100%}.lang{flex:1}.projects{display:none}.brand h1{font-size:10px}}
+</style>
+</head>
+<body>
+<noscript>
+  <div style="padding:24px;background:#111;color:#fff;font-family:Arial,sans-serif;text-align:center">
+    Este portfolio necesita JavaScript habilitado para funcionar.
+  </div>
+</noscript>
+<div class="app" id="app">
+<header class="top">
+  <div class="brand"><h1>Daniel Peralta Architect — Portfolio</h1><p id="subtitle">Architecture portfolio</p></div>
+  <div class="tools">
+    <div class="langs"><button class="lang active" data-lang="en">English</button></div>
+    <button id="thumbBtn" disabled>▦ <span class="label" data-t="thumbs">Thumbnails</span></button>
+    <button id="fullBtn">⛶ <span class="label" data-t="fullscreen">Full screen</span></button>
+    <button id="loadBtn">＋ <span class="label" data-t="load">Load PDF</span></button>
+    <a class="btn" id="downloadBtn" href="#" download>↓ <span class="label" data-t="download">Download PDF</span></a>
+    <a class="btn projects" id="projectsBtn" href="https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1" target="_blank" rel="noopener noreferrer">↗ <span class="label" data-t="projects">View projects</span></a>
+  </div>
+</header>
+
+<main class="viewport" id="viewport">
+  <div class="shell" id="shell"><div id="book"></div></div>
+  <div class="overlay show" id="overlay"><div class="card">
+    <h2 id="loadTitle">Loading portfolio</h2><p id="loadMessage">Preparing PDF...</p>
+    <div class="track"><div class="bar" id="bar"></div></div>
+    <button class="fallback" id="fallback">Select PDF</button>
+  </div></div>
+</main>
+
+<footer class="bottom">
+  <div class="nav"><button id="prev" disabled>← <span data-t="prev">Previous</span></button><span class="counter" id="counter">0 / 0</span><button id="next" disabled><span data-t="next">Next</span> →</button></div>
+  <div class="zoom"><button id="minus">−</button><span class="zoomValue" id="zoomValue">100%</span><button id="plus">+</button><button id="reset">1:1</button></div>
+  <form class="jump" id="jump"><label data-t="goPage">Go to page</label><input id="pageInput" type="number" min="1" value="1" disabled><button id="goBtn" disabled data-t="go">Go</button></form>
+</footer>
+</div>
+
+<input class="hidden" id="fileInput" type="file" accept="application/pdf,.pdf">
+<div class="backdrop" id="backdrop"></div>
+<section class="thumbs" id="thumbs"><div class="thumbHead"><h2 data-t="thumbs">Thumbnails</h2><button id="closeThumbs">✕</button></div><div class="grid" id="grid"></div></section>
+
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const pdfjsLib = window.pdfjsLib;
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const CONFIG={
+  pdf:{es:"pdf/portfolio-es.pdf",en:"pdf/portfolio-en.pdf"},
+  projects:{es:"https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1",en:"https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1"},
+  page:{width:2480,height:1860},
+  renderWidth:1800,
+  zoom:{min:.8,max:1.6,step:.1}
+};
+const T={
+ es:{subtitle:"Architecture portfolio",prev:"Anterior",next:"Siguiente",thumbs:"Miniaturas",fullscreen:"Pantalla completa",load:"Cargar PDF",download:"Descargar PDF",projects:"Ver proyectos",goPage:"Ir a página",go:"Ir",loading:"Loading portfolio",reading:"Leyendo el archivo PDF...",render:"Preparando página {a} de {b}...",error:"No se pudo cargar el PDF",help:"Coloca el PDF en la carpeta indicada o selecciónalo desde tu computadora.",select:"Select PDF"},
+ en:{subtitle:"Architecture portfolio",prev:"Previous",next:"Next",thumbs:"Thumbnails",fullscreen:"Full screen",load:"Load PDF",download:"Download PDF",projects:"View projects",goPage:"Go to page",go:"Go",loading:"Loading portfolio",reading:"Reading PDF file...",render:"Preparing page {a} of {b}...",error:"The PDF could not be loaded",help:"Place the PDF in the indicated folder or select it from your computer.",select:"Select PDF"}
+};
+let lang="en";
+let requested=Math.max(0,(parseInt(new URLSearchParams(location.search).get("page"))||1)-1);
+let flip=null,count=0,zoom=1,sequence=0,urls=[];
+const local={es:null,en:null},names={es:null,en:null};
+const $=id=>document.getElementById(id);
+const book=$("book"),grid=$("grid"),overlay=$("overlay"),bar=$("bar"),loadTitle=$("loadTitle"),loadMessage=$("loadMessage"),fallback=$("fallback"),counter=$("counter"),prev=$("prev"),next=$("next"),pageInput=$("pageInput"),goBtn=$("goBtn"),thumbBtn=$("thumbBtn"),downloadBtn=$("downloadBtn"),projectsBtn=$("projectsBtn"),fileInput=$("fileInput"),shell=$("shell");
+
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const source=()=>local[lang]||CONFIG.pdf[lang];
+const current=()=>flip&&count?clamp(flip.getCurrentPageIndex(),0,count-1):0;
+
+function fitBookToViewport(){
+ const vp=$("viewport");
+ if(!vp)return;
+
+ const availableWidth=Math.max(280,vp.clientWidth-6);
+ const availableHeight=Math.max(210,vp.clientHeight-6);
+ const spreadRatio=(CONFIG.page.width*2)/CONFIG.page.height;
+
+ let width=Math.min(1880,availableWidth);
+ let height=width/spreadRatio;
+
+ if(height>availableHeight){
+   height=availableHeight;
+   width=height*spreadRatio;
+ }
+
+ book.style.width=Math.floor(width)+"px";
+ book.style.height=Math.floor(height)+"px";
+
+ if(flip&&typeof flip.updateFromHtml==="function"){
+   try{ flip.updateFromHtml(book.querySelectorAll(".page")); }catch(e){}
+ }
+}
+
+function textUI(){
+ document.documentElement.lang=lang;
+ $("subtitle").textContent=T[lang].subtitle;
+ document.querySelectorAll("[data-t]").forEach(el=>el.textContent=T[lang][el.dataset.t]);
+ document.querySelectorAll(".lang").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+ projectsBtn.href="https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1";downloadBtn.href=source();
+}
+function loading(p,title,msg,error=false){
+ overlay.classList.add("show");bar.style.width=clamp(p,0,100)+"%";loadTitle.textContent=title;loadMessage.textContent=msg;
+ fallback.textContent=T[lang].select;fallback.classList.toggle("show",error);
+}
+function enable(on){
+ thumbBtn.disabled=!on;pageInput.disabled=!on;goBtn.disabled=!on;prev.disabled=!on;next.disabled=!on;
+}
+function cleanup(){
+ if(flip)try{flip.destroy()}catch(e){} flip=null;book.innerHTML="";grid.innerHTML="";count=0;counter.textContent="0 / 0";enable(false);
+ urls.forEach(URL.revokeObjectURL);urls=[];
+}
+async function blobURL(canvas){
+ const blob=await new Promise((ok,no)=>canvas.toBlob(b=>b?ok(b):no(new Error("canvas")),"image/jpeg",.93));
+ const u=URL.createObjectURL(blob);urls.push(u);return u;
+}
+async function render(pdf,seq){
+ const out=[];
+ for(let n=1;n<=pdf.numPages;n++){
+  if(seq!==sequence)throw new Error("cancel");
+  loading(12+Math.round((n-1)/pdf.numPages*82),T[lang].loading,T[lang].render.replace("{a}",n).replace("{b}",pdf.numPages));
+  const p=await pdf.getPage(n),v0=p.getViewport({scale:1}),v=p.getViewport({scale:CONFIG.renderWidth/v0.width});
+  const c=document.createElement("canvas");c.width=Math.ceil(v.width);c.height=Math.ceil(v.height);
+  const ctx=c.getContext("2d",{alpha:false});ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);
+  await p.render({canvasContext:ctx,viewport:v,background:"#fff"}).promise;
+  out.push(await blobURL(c));c.width=c.height=1;p.cleanup();
+ }
+ return out;
+}
+function build(images){
+ const pf=document.createDocumentFragment(),tf=document.createDocumentFragment();
+ images.forEach((u,i)=>{
+  const p=document.createElement("div");p.className="page";p.dataset.density=(i===0||i===images.length-1)?"hard":"soft";
+  const im=document.createElement("img");im.src=u;im.alt=(lang==="es"?"Página ":"Page ")+(i+1);p.append(im);pf.append(p);
+  const b=document.createElement("button");b.className="thumb";b.dataset.i=i;
+  const ti=document.createElement("img");ti.src=u;ti.alt="";const s=document.createElement("span");s.textContent=i+1;
+  b.append(ti,s);b.onclick=()=>{go(i,true);closeThumbs()};tf.append(b);
+ });
+ book.append(pf);grid.append(tf);
+}
+function makeBook(start){
+ fitBookToViewport();
+ flip=new St.PageFlip(book,{width:CONFIG.page.width,height:CONFIG.page.height,size:"stretch",minWidth:280,maxWidth:1100,minHeight:210,maxHeight:825,maxShadowOpacity:.55,showCover:true,usePortrait:false,mobileScrollSupport:true,useMouseEvents:true,swipeDistance:28,startPage:clamp(start,0,count-1),drawShadow:true,flippingTime:720,autoSize:true});
+ flip.loadFromHTML(book.querySelectorAll(".page"));flip.on("flip",update);flip.on("init",update);
+ requestAnimationFrame(()=>{fitBookToViewport();go(start,false);update()});
+}
+async function loadPortfolio(newLang,start=current()){
+ const seq=++sequence;lang=newLang;requested=Math.max(0,start);textUI();closeThumbs();cleanup();loading(4,T[lang].loading,T[lang].reading);
+ try{
+  const task=pdfjsLib.getDocument({url:source()});
+  task.onProgress=({loaded,total})=>{if(seq===sequence&&total)loading(4+Math.round(loaded/total*8),T[lang].loading,T[lang].reading)};
+  const pdf=await task.promise;if(seq!==sequence)return;
+  count=pdf.numPages;const images=await render(pdf,seq);if(seq!==sequence)return;
+  build(images);makeBook(clamp(requested,0,count-1));pageInput.max=count;downloadBtn.href=source();downloadBtn.download=names[lang]||(lang==="es"?"Daniel-Peralta-Portfolio-ES.pdf":"Daniel-Peralta-Portfolio-EN.pdf");
+  loading(100,T[lang].loading,"100%");setTimeout(()=>overlay.classList.remove("show"),150);enable(true);update();
+ }catch(e){if(seq!==sequence)return;console.error(e);loading(0,T[lang].error,T[lang].help,true)}
+}
+function update(){
+ if(!flip||!count)return;const i=current();prev.disabled=i<=0;next.disabled=i>=count-1;counter.textContent=(i+1)+" / "+count;pageInput.value=i+1;
+ grid.querySelectorAll(".thumb").forEach(t=>t.classList.toggle("active",+t.dataset.i===i));
+ const u=new URL(location.href);u.searchParams.set("lang",lang);u.searchParams.set("page",i+1);history.replaceState({},"",u);
+}
+function go(i,animate=true){
+ if(!flip)return;const t=clamp(+i||0,0,count-1);
+ if(animate&&flip.flip)flip.flip(t);else if(flip.turnToPage)flip.turnToPage(t);setTimeout(update,animate?120:0);
+}
+function applyZoom(){
+ zoom=Math.round(clamp(zoom,CONFIG.zoom.min,CONFIG.zoom.max)*10)/10;
+ if("zoom" in document.body.style){shell.style.zoom=zoom;shell.style.transform=""}else{shell.style.zoom="";shell.style.transform=`scale(${zoom})`}
+ $("zoomValue").textContent=Math.round(zoom*100)+"%";
+}
+function openThumbs(){$("thumbs").classList.add("open");$("backdrop").classList.add("open")}
+function closeThumbs(){$("thumbs").classList.remove("open");$("backdrop").classList.remove("open")}
+function choose(){fileInput.value="";fileInput.click()}
+
+document.querySelectorAll(".lang").forEach(b=>b.onclick=()=>b.dataset.lang!==lang&&loadPortfolio(b.dataset.lang,current()));
+projectsBtn.addEventListener("click",(event)=>{
+ event.preventDefault();
+ const projectUrl="https://mza-arquitectos.github.io/mza-portfolio-/?v=mobile1";
+ const opened=window.open(projectUrl,"_blank","noopener,noreferrer");
+ if(!opened) window.location.href=projectUrl;
+});
+prev.onclick=()=>flip?.flipPrev();next.onclick=()=>flip?.flipNext();thumbBtn.onclick=openThumbs;$("closeThumbs").onclick=closeThumbs;$("backdrop").onclick=closeThumbs;
+$("fullBtn").onclick=async()=>document.fullscreenElement?document.exitFullscreen():$("app").requestFullscreen();
+$("loadBtn").onclick=choose;fallback.onclick=choose;
+fileInput.onchange=()=>{const f=fileInput.files?.[0];if(!f)return;if(!f.name.toLowerCase().endsWith(".pdf"))return alert(lang==="es"?"Selecciona un PDF.":"Select a PDF.");if(local[lang])URL.revokeObjectURL(local[lang]);local[lang]=URL.createObjectURL(f);names[lang]=f.name;loadPortfolio(lang,0)};
+$("minus").onclick=()=>{zoom-=CONFIG.zoom.step;applyZoom()};$("plus").onclick=()=>{zoom+=CONFIG.zoom.step;applyZoom()};$("reset").onclick=()=>{zoom=1;applyZoom()};
+$("jump").onsubmit=e=>{e.preventDefault();go(+pageInput.value-1,true)};
+$("viewport").ondblclick=()=>{zoom=zoom===1?1.4:1;applyZoom()};
+document.onkeydown=e=>{if(e.target.tagName==="INPUT")return;if(["ArrowRight","PageDown"].includes(e.key)){e.preventDefault();flip?.flipNext()}if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();flip?.flipPrev()}if(e.key==="Home")go(0,true);if(e.key==="End")go(count-1,true);if(e.key==="Escape")closeThumbs()};
+let resizeTimer=null;
+window.addEventListener("resize",()=>{
+ clearTimeout(resizeTimer);
+ resizeTimer=setTimeout(fitBookToViewport,120);
+});
+document.addEventListener("fullscreenchange",()=>{
+ setTimeout(fitBookToViewport,120);
+});
+window.onbeforeunload=()=>{urls.forEach(URL.revokeObjectURL);Object.values(local).forEach(u=>u&&URL.revokeObjectURL(u))};
+
+textUI();applyZoom();fitBookToViewport();loadPortfolio(lang,requested);
+</script>
+</body>
+</html>
