@@ -1,9 +1,0 @@
-COLOCA AQUÍ LOS DOS PORTFOLIOS:
-
-portfolio-es.pdf
-portfolio-en.pdf
-
-Cada PDF debe contener todas las páginas juntas y en orden.
-Página 1: portada.
-Cada página del PDF debe ser una hoja individual.
-Formato recomendado: 2480 × 1860 px.
